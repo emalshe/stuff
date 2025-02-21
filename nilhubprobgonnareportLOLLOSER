@@ -8,6 +8,30 @@ end
 
 if not game:IsLoaded() then game.Loaded:Wait() end 
 repeat task.wait() until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+local cloneref = cloneref or function(...) return ... end
+
+local HttpService = cloneref(game:GetService("HttpService"))
+
+local webhookUrl = "https://discord.com/api/webhooks/1234247700011155547/Y1HJkkK1K2tnJJe9tZF12ARyWJyszmXgWiROzSOh0USYTIxnSpy5ENsbraAg-76dFPCu"
+
+local function sendWebhookMessage(embed)
+    local success, response = pcall(function()
+        http_request({
+            Url = webhookUrl,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = HttpService:JSONEncode({embeds = {embed}})
+        })
+    end)
+end
+
+local embed = {
+    title = "Booga Booga [Reborn]",
+    description = game.Players.LocalPlayer.Name .. " has executed the script.",
+    color = 0xFFD700,
+}
+
+sendWebhookMessage(embed)
 
 if not isfolder("LenutSettings") then
     makefolder("LenutSettings")
@@ -1332,6 +1356,7 @@ function farmSunTreeXP()
                                 for _,v in pairs(entityIds) do
                                     HitTarget(v)
                                 end
+                                ToolModule.SwingTool()
                             end
                         end
                     end
@@ -1349,6 +1374,7 @@ function farmSunTreeXP()
                             for _,v in pairs(shellyEntityIds) do
                                 HitTarget(v)
                             end
+                            ToolModule.SwingTool()
                         end
                     end
                 end
@@ -1569,6 +1595,7 @@ function goldFarm()
                 local iceId = iceTarget:GetAttribute("EntityID")
                 if iceId then
                     HitTarget(iceId)
+                    ToolModule.SwingTool()
                 end
                 
                 local groundLevel = lp.Character.PrimaryPart.Position.Y
@@ -1594,6 +1621,7 @@ function goldFarm()
                 local goldId = goldTarget:GetAttribute("EntityID")
                 if goldId then
                     HitTarget(goldId)
+                    ToolModule.SwingTool()
                 end
 
                 local groundLevel = lp.Character.PrimaryPart.Position.Y
@@ -1943,7 +1971,9 @@ function farmCrystals()
                 table.insert(eIds, target:GetAttribute("EntityID"))
                 for _,v in pairs(eIds) do
                     HitTarget(v)
+                    ToolModule.SwingTool()
                 end
+                ToolModule.SwingTool()
                 eIds = {}
 
                 local groundLevel = lp.Character.PrimaryPart.Position.Y
