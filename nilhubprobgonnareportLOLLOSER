@@ -10,37 +10,6 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 repeat task.wait() until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 local cloneref = cloneref or function(...) return ... end
 
-local HttpService = cloneref(game:GetService("HttpService"))
-
-local webhookUrl = "https://discord.com/api/webhooks/1234247700011155547/Y1HJkkK1K2tnJJe9tZF12ARyWJyszmXgWiROzSOh0USYTIxnSpy5ENsbraAg-76dFPCu"
-
-local function sendWebhookMessage(embed)
-    local success, response = pcall(function()
-        http_request({
-            Url = webhookUrl,
-            Method = "POST",
-            Headers = {["Content-Type"] = "application/json"},
-            Body = HttpService:JSONEncode({embeds = {embed}})
-        })
-    end)
-end
-
-local embed = {
-    title = "Booga Booga [Reborn]",
-    description = game.Players.LocalPlayer.Name .. " has executed the script.",
-    color = 0xFFD700,
-}
-
-sendWebhookMessage(embed)
-
-if not isfolder("LenutSettings") then
-    makefolder("LenutSettings")
-end
-
-if not isfolder("LenutSettings/BoogaBoogaReborn") then
-    makefolder("LenutSettings/BoogaBoogaReborn")
-end
-
 if not getgenv().SpoofedWalkspeed then
     local gmt = getrawmetatable(game)
     setreadonly(gmt,false)
