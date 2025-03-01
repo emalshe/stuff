@@ -1,1 +1,4 @@
-
+# This is a sample updated code
+def greet():
+    print("Hello, World!")
+greet()
