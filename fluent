@@ -104,17 +104,17 @@ local aa = {
     function()
         local c, d, e, f, g = b(1)
         local h, i, j, k, l, m =
-            cloneref(game:GetService "Lighting"),
-            cloneref(game:GetService "RunService"),
-            cloneref(game:GetService "Players".LocalPlayer),
-            cloneref(game:GetService "UserInputService"),
-            cloneref(game:GetService "TweenService"),
-            cloneref(game:GetService "Workspace").CurrentCamera
+            game:GetService "Lighting",
+            game:GetService "RunService",
+            game:GetService "Players".LocalPlayer,
+            game:GetService "UserInputService",
+            game:GetService "TweenService",
+            game:GetService "Workspace".CurrentCamera
         local n, o = j:GetMouse(), d
         local p, q, r, s = e(o.Creator), e(o.Elements), e(o.Acrylic), o.Components
         local t, u, v = e(s.Notification), p.New, protectgui or (syn and syn.protect_gui) or function()
                 end
-        local w = u("ScreenGui", {Parent = i:IsStudio() and j.PlayerGui or cloneref(game:GetService "CoreGui")})
+        local w = u("ScreenGui", {Parent = i:IsStudio() and j.PlayerGui or game:GetService "CoreGui"}
         v(w)
         t:Init(w)
         local x = {
@@ -253,7 +253,7 @@ local aa = {
                 for k, l in pairs(j) do
                     l.Enabled = false
                 end
-                i.Parent = cloneref(game:GetService "Lighting")
+                i.Parent = game:GetService "Lighting")
             end
             function h.Disable()
                 for k, l in pairs(j) do
@@ -267,11 +267,11 @@ local aa = {
                         j[k] = {enabled = k.Enabled}
                     end
                 end
-                for l, m in pairs(cloneref(game:GetService "Lighting"):GetChildren()) do
+                for l, m in pairs(game:GetService "Lighting"):GetChildren() do
                     k(m)
                 end
-                if cloneref(game:GetService "Workspace").CurrentCamera then
-                    for n, o in pairs(cloneref(game:GetService "Workspace").CurrentCamera:GetChildren()) do
+                if game:GetService "Workspace".CurrentCamera then
+                    for n, o in pairs(game:GetService "Workspace").CurrentCamera:GetChildren() do
                         k(o)
                     end
                 end
@@ -294,7 +294,7 @@ local aa = {
                     n.topRight = q + Vector2.new(p.X, 0)
                     n.bottomRight = q + p
                 end, function()
-                    local p = cloneref(game:GetService "Workspace").CurrentCamera
+                    local p = game:GetService "Workspace".CurrentCamera
                     if p then
                         p = p.CFrame
                     end
@@ -314,7 +314,7 @@ local aa = {
                     p(t, u)
                     task.spawn(q)
                 end, function()
-                    local r = cloneref(game:GetService "Workspace").CurrentCamera
+                    local r = game:GetService "Workspace".CurrentCamera
                     if not r then
                         return
                     end
@@ -497,11 +497,11 @@ local aa = {
         local h, i = function(h, i, j, k, l)
                 return (h - i) * (l - k) / (j - i) + k
             end, function(h, i)
-                local j = cloneref(game:GetService "Workspace").CurrentCamera:ScreenPointToRay(h.X, h.Y)
+                local j = game:GetService "Workspace".CurrentCamera:ScreenPointToRay(h.X, h.Y)
                 return j.Origin + j.Direction * i
             end
         local j = function()
-            local j = cloneref(game:GetService "Workspace").CurrentCamera.ViewportSize.Y
+            local j = game:GetService "Workspace".CurrentCamera.ViewportSize.Y
             return h(j, 0, 2560, 8, 56)
         end
         return {i, j}
@@ -595,9 +595,9 @@ local aa = {
     [10] = function()
         local c, d, e, f, g = b(10)
         local h, i, j, k =
-        cloneref(game:GetService "UserInputService"),
-        cloneref(game:GetService "Players").LocalPlayer:GetMouse(),
-        cloneref(game:GetService "Workspace").CurrentCamera,
+        game:GetService "UserInputService",
+        game:GetService "Players".LocalPlayer:GetMouse(),
+        game:GetService "Workspace".CurrentCamera,
             d.Parent.Parent
         local l, m = e(k.Packages.Flipper), e(k.Creator)
         local n, o, p, q = l.Spring.new, l.Instant.new, m.New, {Window = nil}
@@ -1321,7 +1321,7 @@ local aa = {
     end,
     [15] = function()
         local c, d, e, f, g = b(15)
-        local h, i = cloneref(game:GetService "TextService"), d.Parent.Parent
+        local h, i = game:GetService "TextService", d.Parent.Parent
         local j, k = e(i.Packages.Flipper), e(i.Creator)
         local l = k.New
         return function(m, n)
@@ -1614,9 +1614,9 @@ local aa = {
     [17] = function()
         local c, d, e, f, g = b(17)
         local h, i, j, k =
-        cloneref(game:GetService "UserInputService"),
-        cloneref(game:GetService "Players").LocalPlayer:GetMouse(),
-        cloneref(game:GetService "Workspace").CurrentCamera,
+        game:GetService "UserInputService",
+        game:GetService "Players".LocalPlayer:GetMouse(),
+        game:GetService "Workspace".CurrentCamera,
             d.Parent.Parent
         local l, m, n, o, p = e(k.Packages.Flipper), e(k.Creator), e(k.Acrylic), e(d.Parent.Assets), d.Parent
         local q, r, s = l.Spring.new, l.Instant.new, m.New
@@ -2144,10 +2144,10 @@ local aa = {
     [21] = function()
         local c, d, e, f, g = b(21)
         local h, i, j, k =
-        cloneref(game:GetService "UserInputService"),
-        cloneref(game:GetService "TouchInputService"),
-        cloneref(game:GetService "RunService"),
-        cloneref(game:GetService "Players")
+        game:GetService "UserInputService",
+        game:GetService "TouchInputService",
+        game:GetService "RunService",
+        game:GetService "Players"
         local l, m = j.RenderStepped, k.LocalPlayer
         local n, o = m:GetMouse(), d.Parent.Parent
         local p = e(o.Creator)
@@ -2626,10 +2626,10 @@ local aa = {
     [22] = function()
         local aa, ab, ac, ad, ae = b(22)
         local af, ag, ah, ai, aj =
-        cloneref(game:GetService "TweenService"),
-        cloneref(game:GetService "UserInputService"),
-        cloneref(game:GetService "Players").LocalPlayer:GetMouse(),
-        cloneref(game:GetService "Workspace").CurrentCamera,
+        game:GetService "TweenService",
+        game:GetService "UserInputService",
+        game:GetService "Players".LocalPlayer:GetMouse(),
+        game:GetService "Workspace".CurrentCamera,
             ab.Parent.Parent
         local c, d = ac(aj.Creator), ac(aj.Packages.Flipper)
         local e, f, g = c.New, aj.Components, {}
@@ -3136,7 +3136,7 @@ local aa = {
     end,
     [24] = function()
         local aa, ab, ac, ad, ae = b(24)
-        local af, ag = cloneref(game:GetService "UserInputService"), ab.Parent.Parent
+        local af, ag = game:GetService "UserInputService", ab.Parent.Parent
         local ah = ac(ag.Creator)
         local ai, aj, c = ah.New, ag.Components, {}
         c.__index = c
@@ -3353,7 +3353,7 @@ local aa = {
     end,
     [26] = function()
         local aa, ab, ac, ad, ae = b(26)
-        local af, ag = cloneref(game:GetService "UserInputService"), ab.Parent.Parent
+        local af, ag = game:GetService "UserInputService", ab.Parent.Parent
         local ah = ac(ag.Creator)
         local ai, aj, c = ah.New, ag.Components, {}
         c.__index = c
@@ -3483,7 +3483,7 @@ local aa = {
     end,
     [27] = function()
         local aa, ab, ac, ad, ae = b(27)
-        local af, ag = cloneref(game:GetService "TweenService"), ab.Parent.Parent
+        local af, ag = game:GetService "TweenService", ab.Parent.Parent
         local ah = ac(ag.Creator)
         local ai, aj, c = ah.New, ag.Components, {}
         c.__index = c
@@ -4400,7 +4400,7 @@ local aa = {
     end,
     [31] = function()
         local aa, ab, ac, ad, ae = b(31)
-        local af, ag, ah, ai = cloneref(game:GetService "RunService"), ac(ab.Parent.Signal), function()
+        local af, ag, ah, ai = game:GetService "RunService", ac(ab.Parent.Signal), function()
             end, {}
         ai.__index = ai
         function ai.new()
@@ -4443,7 +4443,7 @@ local aa = {
     [32] = function()
         local aa, ab, ac, ad, ae = b(32)
         return function()
-            local af, ag = cloneref(game:GetService "RunService"), ac(ab.Parent.BaseMotor)
+            local af, ag = game:GetService "RunService", ac(ab.Parent.BaseMotor)
             describe(
                 "connection management",
                 function()
