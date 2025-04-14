@@ -253,7 +253,7 @@ local aa = {
                 for k, l in pairs(j) do
                     l.Enabled = false
                 end
-                i.Parent = game:GetService "Lighting")
+                i.Parent = game:GetService "Lighting"
             end
             function h.Disable()
                 for k, l in pairs(j) do
