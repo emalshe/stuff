@@ -2627,7 +2627,7 @@ function handleCompetitiveQuest(quest, questTask, progress, hatchAmount)
                     consumePotionsToggle:SetValue(false)
                 end
                 local startTime = os.clock()
-                while os.clock() - startTime < 2 do
+                while os.clock() - startTime < 1 do
                     if not config.autoCompetitive then return end
                     Network.FireServer("Event", "Teleport", destination)
                     task.wait()
