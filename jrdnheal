@@ -2869,26 +2869,32 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    local plrData = localData.Get()
-    local lastHatchCount = plrData.Stats.Hatches
-    local lastChangeTime = os.clock()
+    local lastHatchCount = nil
+    local unchangedTime = 0
 
     while true do
-        if config.autoCompetitive then
-            local plrData = localData.Get()
+        local plrData = localData.Get()
+
+        if plrData and plrData.Stats and plrData.Stats.Hatches then
             local currentHatchCount = plrData.Stats.Hatches
 
-            if currentHatchCount ~= lastHatchCount then
+            if lastHatchCount == nil then
                 lastHatchCount = currentHatchCount
-                lastChangeTime = os.clock()
-            elseif os.clock() - lastChangeTime >= 20 then
-                autoCompToggle:SetValue(false)
-                autoCompToggle:SetValue(true)
-                lastChangeTime = os.clock()
             end
-        else
-            lastChangeTime = os.clock()
+
+            if currentHatchCount == lastHatchCount then
+                unchangedTime += 0.1
+            else
+                unchangedTime = 0
+                lastHatchCount = currentHatchCount
+            end
+
+            if config.autoCompetitive and unchangedTime >= 20 then
+                teleported = false
+                unchangedTime = 0
+            end
         end
+
         task.wait(0.1)
     end
 end)
