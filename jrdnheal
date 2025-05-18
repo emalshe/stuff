@@ -2871,7 +2871,7 @@ end)
 task.spawn(function()
     local plrData = localData.Get()
     local lastHatchCount = plrData.Stats.Hatches
-    local lastChangeTime = nil
+    local lastChangeTime = os.clock()
 
     while true do
         if config.autoCompetitive then
@@ -2881,13 +2881,13 @@ task.spawn(function()
             if currentHatchCount ~= lastHatchCount then
                 lastHatchCount = currentHatchCount
                 lastChangeTime = os.clock()
-            elseif lastChangeTime and (os.clock() - lastChangeTime >= 20) then
+            elseif os.clock() - lastChangeTime >= 20 then
                 autoCompToggle:SetValue(false)
                 autoCompToggle:SetValue(true)
                 lastChangeTime = os.clock()
             end
         else
-            lastChangeTime = nil
+            lastChangeTime = os.clock()
         end
         task.wait(0.1)
     end
