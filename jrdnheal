@@ -2620,7 +2620,12 @@ function handleCompetitiveQuest(quest, questTask, progress, hatchAmount)
                 end
             end
     
+            local wasPotionOn = false
             if needsTeleport and not teleported then
+                if config.autoConsumePotions then
+                    wasPotionOn = true
+                    consumePotionsToggle:SetValue(false)
+                end
                 local startTime = os.clock()
                 while os.clock() - startTime < 2 do
                     if not config.autoCompetitive then return end
@@ -2628,6 +2633,9 @@ function handleCompetitiveQuest(quest, questTask, progress, hatchAmount)
                     task.wait()
                 end
                 teleported = true
+                if wasPotionOn then
+                    consumePotionsToggle:SetValue(true)
+                end
             end
     
             eggPos = findEgg(egg)
