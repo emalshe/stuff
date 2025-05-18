@@ -2622,7 +2622,7 @@ function handleCompetitiveQuest(quest, questTask, progress, hatchAmount)
     
             if needsTeleport and not teleported then
                 local startTime = os.clock()
-                while os.clock() - startTime < 0.5 do
+                while os.clock() - startTime < 1 do
                     if not config.autoCompetitive then return end
                     Network.FireServer("Event", "Teleport", destination)
                     task.wait()
