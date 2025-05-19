@@ -2758,7 +2758,7 @@ function completeCompQuest()
                 if task.Type == "Hatch" and task.Shiny then return table.find(config.selectedIgnoreQuest, "Shiny") end
                 if task.Type == "Hatch" and task.Mythic then return table.find(config.selectedIgnoreQuest, "Mythic") end
                 if task.Type == "Playtime" then return table.find(config.selectedIgnoreQuest, "Playtime") end
-                if task.Type == "Hatch" and task.Amount and not task.Egg and countTableKeys(task) == 2 then return task.Amount > 1000 and table.find(config.selectedIgnoreQuest, "Hatch Amount") end    
+                if task.Type == "Hatch" and task.Amount and not task.Egg and countTableKeys(task) == 2 then return table.find(config.selectedIgnoreQuest, "Hatch Amount") end    
                 if task.Type == "Hatch" and task.Amount and task.Egg and task.Egg:find("Neon") then return table.find(config.selectedIgnoreQuest, "Neon Egg") end    
                 return false
             end
