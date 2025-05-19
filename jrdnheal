@@ -1,8 +1,8 @@
 local scriptStatus = loadstring(game:HttpGet("https://pastebin.com/raw/tETBwUZF"))()
 if not scriptStatus then return end
 
---local whitelistedUsers = loadstring(game:HttpGet("https://pastebin.com/raw/Em1Ae4Rx"))()
---if not table.find(whitelistedUsers, game.Players.LocalPlayer.Name) then return end
+local whitelistedUsers = loadstring(game:HttpGet("https://pastebin.com/raw/Em1Ae4Rx"))()
+if not table.find(whitelistedUsers, game.Players.LocalPlayer.Name) then return end
 
 if not game:IsLoaded() then game.Loaded:Wait() end 
 
