@@ -2,17 +2,7 @@ local scriptStatus = loadstring(game:HttpGet("https://pastebin.com/raw/tETBwUZF"
 if not scriptStatus then return end
 
 local whitelistedUsers = loadstring(game:HttpGet("https://pastebin.com/raw/Em1Ae4Rx"))()
-
-local function verifyUser()
-    for i,v in pairs(whitelistedUsers) do
-        if v == game.Players.LocalPlayer.Name then
-            return true
-        end
-    end
-    return false
-end
-
-if not verifyUser() then return end
+if not table.find(whitelistedUsers, game.Players.LocalPlayer.Name) then return end
 
 if not game:IsLoaded() then game.Loaded:Wait() end 
 
@@ -1046,6 +1036,11 @@ local farmRiftToggle = Tabs.Rifts:AddToggle("Farm Rifts Toggle",
 local currentQuest = Tabs.Competitive:AddParagraph({
     Title = "Current Quest",
     Content = "..."
+})
+
+local pointsEarned = Tabs.Competitive:AddParagraph({
+    Title = "Points Earned Since Execution",
+    Content = "0"
 })
 
 local questsIgnoreMultiDropdown = Tabs.Competitive:AddDropdown("Ignore Quests MultiDropdown", {
@@ -2906,6 +2901,19 @@ task.spawn(function()
         end
 
         task.wait(0.1)
+    end
+end)
+
+local plrData = localData.Get()
+local ogCompScore = plrData.Competitive.Score
+
+task.spawn(function()
+    while true do
+        local plrData = localData.Get()
+        local currentScore = plrData.Competitive.Score
+        local earnedScore = currentScore - ogCompScore
+        pointsEarned:SetDesc("Total Earned: "..earnedScore)
+        task.wait(0.5)
     end
 end)
 
