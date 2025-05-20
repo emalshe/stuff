@@ -1,8 +1,8 @@
 local scriptStatus = loadstring(game:HttpGet("https://pastebin.com/raw/tETBwUZF"))()
 if not scriptStatus then return end
 
-local whitelistedUsers = loadstring(game:HttpGet("https://pastebin.com/raw/Em1Ae4Rx"))()
-if not table.find(whitelistedUsers, game.Players.LocalPlayer.Name) then return end
+--local whitelistedUsers = loadstring(game:HttpGet("https://pastebin.com/raw/Em1Ae4Rx"))()
+--if not table.find(whitelistedUsers, game.Players.LocalPlayer.Name) then return end
 
 if not game:IsLoaded() then game.Loaded:Wait() end 
 
@@ -2795,11 +2795,15 @@ function completeCompQuest()
 
             if not didHandle then
                 currentHandledQuest = nil
-                local rrOrb = plrData.Powerups["Reroll Orb"]
+                local rrOrb = plrData.Powerups["Reroll Orb"] or 0
 
                 if comp3Ignored and comp4Ignored then
-                    if not rrOrb or rrOrb <= 5 then
-                        if #config.selectedIgnoreQuest > 0 then
+                    if not rrOrb or rrOrb < 5 then
+                        local count = 0
+                        for i,v in pairs(config.selectedIgnoreQuest) do
+                            count = count + 1
+                        end
+                        if count > 0 then
                             saveIgnoreTable()
                         end
                         config.selectedIgnoreQuest = {}
@@ -2830,15 +2834,19 @@ task.spawn(function()
     while true do
         if config.autoCompetitive then
             local plrData = localData.Get()
-            local currentRerollCount = plrData.Powerups["Reroll Orb"]
+            local currentRerollCount = plrData.Powerups["Reroll Orb"] or 0
 
-            if currentRerollCount and currentRerollCount > 5 and #config.selectedIgnoreQuest == 0 then
+            local count = 0
+
+            for i,v in pairs(config.selectedIgnoreQuest) do
+                count = count + 1
+            end
+
+            if currentRerollCount and currentRerollCount > 5 and count == 0 then
                 restoreIgnoreTable()
-                autoCompToggle:SetValue(false)
-                autoCompToggle:SetValue(true)
             end
         end
-        task.wait(1)
+        task.wait()
     end
 end)
 
