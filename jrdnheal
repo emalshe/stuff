@@ -2108,7 +2108,6 @@ function openMysteryBox()
 
             if amount > 0 then
                 Network.FireServer("Event", "UseGift", "Mystery Box", amount)
-                task.wait(1)
                 for _, v in pairs(workspace.Rendered.Gifts:GetChildren()) do
                     if v and v:IsA("Part") then
                         Network.FireServer("Event", "ClaimGift", v.Name)
