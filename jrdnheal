@@ -2799,7 +2799,9 @@ function completeCompQuest()
 
                 if comp3Ignored and comp4Ignored then
                     if not rrOrb or rrOrb <= 5 then
-                        saveIgnoreTable()
+                        if #config.selectedIgnoreQuest > 0 then
+                            saveIgnoreTable()
+                        end
                         config.selectedIgnoreQuest = {}
                     else
                         if comp3 then
