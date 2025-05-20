@@ -2112,14 +2112,14 @@ function openMysteryBox()
                 for _, v in pairs(workspace.Rendered.Gifts:GetChildren()) do
                     if v and v:IsA("Part") then
                         Network.FireServer("Event", "ClaimGift", v.Name)
-                        --local giftPosition = v.Position
-                        --local giftObject = giftModule.new(v, giftPosition)
-                        --giftObject:Destroy()
+                        local giftPosition = v.Position
+                        local giftObject = giftModule.new(v, giftPosition)
+                        giftObject:Destroy()
                     end
                 end
             end
         end
-        task.wait(0.5)
+        task.wait(0.1)
     end
 end
 
