@@ -1045,7 +1045,7 @@ local pointsEarned = Tabs.Competitive:AddParagraph({
 
 local questsIgnoreMultiDropdown = Tabs.Competitive:AddDropdown("Ignore Quests MultiDropdown", {
     Title = "Ignore Quests",
-    Values = {"Hatch Specific Egg", "Mythic", "Shiny", "Hatch Amount", "Playtime", "Neon Egg"},
+    Values = {"Hatch Specific Egg", "Hatch Rarity", "Mythic", "Shiny", "Hatch Amount", "Playtime", "Neon Egg"},
     Multi = true,
     Default = {},
 })
@@ -2760,6 +2760,7 @@ function completeCompQuest()
                 if task.Type == "Playtime" then return table.find(config.selectedIgnoreQuest, "Playtime") end
                 if task.Type == "Hatch" and task.Amount and not task.Egg and countTableKeys(task) == 2 then return table.find(config.selectedIgnoreQuest, "Hatch Amount") end    
                 if task.Type == "Hatch" and task.Amount and task.Egg and task.Egg:find("Neon") then return table.find(config.selectedIgnoreQuest, "Neon Egg") end    
+                if task.Type == "Hatch" and task.Rarity then return table.find(config.selectedIgnoreQuest, "Hatch Rarity") end
                 return false
             end
 
