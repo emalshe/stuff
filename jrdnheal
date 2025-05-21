@@ -2820,8 +2820,8 @@ function completeCompQuest()
                             Network.FireServer("Event", "CompetitiveReroll", questId)
                             task.wait(1)
                         end
-                        autoCompToggle:SetValue(false)
-                        autoCompToggle:SetValue(true)
+                        didHandle = false
+                        currentHandledQuest = nil
                     end
                 end
                 teleported = false
