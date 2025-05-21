@@ -2812,6 +2812,7 @@ function completeCompQuest()
                             local questId = comp3.Id:gsub("competitive--", "")
                             questId = tonumber(questId)
                             Network.FireServer("Event", "CompetitiveReroll", questId)
+                            task.wait(1)
                         end
                         if comp4 then
                             local questId = comp4.Id:gsub("competitive--", "")
