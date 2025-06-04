@@ -1,0 +1,208 @@
+if not game:IsLoaded() then game.Loaded:Wait() end 
+
+local config = {
+    helpPlayers = false,
+    selectedPlayers = {},
+    limitFPS = false
+}
+
+local lp = game:GetService("Players").LocalPlayer or game.Players.LocalPlayer
+local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+for i,v in pairs(getconnections(lp.Idled)) do v:Disable() end
+
+local Fluent = loadstring(game:HttpGet("https://pastebin.com/raw/ivKf0LFW"))()
+local Window = Fluent:CreateWindow({
+    Title = "RT3 - ja5on7190",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(500, 425),
+    Acrylic = false,
+    Theme = "Obsidian Glow",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+local Tabs = {
+    Mobile = Window:AddTab({ Title = "Mobile", Icon = "rbxassetid://10734921524" }),
+    Farming = Window:AddTab({ Title = "Farming", Icon = "rbxassetid://10709811110" }),
+}
+
+Window:SelectTab(1)
+
+Tabs.Mobile:AddButton({
+    Title = "Mobile Helper",
+    Callback = function()    
+        for i,v in pairs(CoreGui:GetDescendants()) do
+            if v.Name == "Lebutton" then
+                return
+            end
+        end
+        local gui = Instance.new("ScreenGui")
+        gui.Parent = CoreGui
+        local button = Instance.new("TextButton")
+        button.Text = "Hide/Show"
+        button.Name = "Lebutton"
+        button.BackgroundColor3 = Color3.new(1, 1, 1)
+        button.Size = UDim2.new(0, 75, 0, 75)
+        button.Position = UDim2.new(0.5, -button.Size.X.Offset / 2, 0, -50)
+        button.Transparency = 0
+        button.Parent = gui
+
+        local uicorner = Instance.new("UICorner")
+        uicorner.CornerRadius = UDim.new(0, 100)
+        uicorner.Parent = button
+
+        button.TextSize = 10
+        button.TextColor3 = Color3.new(0, 0, 0)
+
+        local function ToggleVisibility()
+            for _, v in pairs(CoreGui:GetDescendants()) do
+                if v:IsA("Frame") and v.Size.X.Offset == 500 and v.Size.Y.Offset == 425 and v.Parent:IsA("ScreenGui") then
+                    v.Visible = not v.Visible
+                end
+            end
+        end
+            
+        if UserInputService.TouchEnabled then
+            button.Activated:Connect(ToggleVisibility)
+        else
+            button.MouseButton1Click:Connect(ToggleVisibility)
+        end
+    end
+})
+
+local function getPlayers()
+    local players = {}
+    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+        table.insert(players, v.Name)
+    end
+    return players
+end
+
+local players = getPlayers() or {}
+
+local PlayersMultiDropdown = Tabs.Farming:AddDropdown("Players MultiDropdown", {
+   Title = "Players",
+   Description = "Select players to help.",
+   Values = players,
+   Multi = true,
+   Default = {}
+})
+
+PlayersMultiDropdown:OnChanged(function(plr)
+    config.selectedPlayers = {}
+    for plr, State in next, plr do
+        table.insert(config.selectedPlayers, plr)
+    end
+end)
+
+Tabs.Farming:AddButton({
+    Title = "Refresh Player Dropdown",
+    Callback = function()
+        local plrs = getPlayers()
+
+        if plrs then
+            PlayersMultiDropdown:SetValues(plrs)
+        end
+    end
+})
+
+local helpPlayersToggle = Tabs.Farming:AddToggle("Help Players Toggle", 
+{
+    Title = "Help Players", 
+    Default = false
+    Callback = function(v)
+        config.helpPlayers = v
+        if v then
+            spawn(playerHelper)
+        end
+    end 
+})
+
+local limitFPSToggle = Tabs.Farming:AddToggle("Limit FPS Toggle", 
+{
+    Title = "Limit FPS", 
+    Default = false
+    Callback = function(v)
+        config.limitFPS = v
+        if v then
+            lowFPS()
+        end
+    end 
+})
+
+--Functions
+
+function playerHelper()
+    while config.helpPlayers do
+        for _, playerName in ipairs(config.selectedPlayers) do
+
+            for _, desc in pairs(game.Workspace.Tycoons:GetDescendants()) do
+                if desc.Name == "Player" and desc:IsA("ObjectValue") and tostring(desc.Value) == playerName then
+                    local tycoon = desc.Parent
+                    local loc = tycoon:FindFirstChild("Locations")
+
+                    if loc then
+                        local base = loc:FindFirstChild("FrontBase")
+                        if base then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = base.Value
+                            for _, obj in pairs(tycoon:GetDescendants()) do
+                                if obj.Name == "Bill" then
+                                    local args = {{
+                                        Tycoon = tycoon,
+                                        Name = "CollectBill",
+                                        FurnitureModel = obj.Parent
+                                    }}
+                                    ReplicatedStorage.Events.Restaurant.TaskCompleted:FireServer(unpack(args))
+                                end
+                            end
+
+                            for _, obj in pairs(tycoon:GetDescendants()) do
+                                if obj.Name == "Jar" and obj.Parent:GetAttribute("Value") and obj.Parent:GetAttribute("Value") > 0 then
+                                    ReplicatedStorage.Events.Restaurant.TipsCollected:FireServer(tycoon)
+                                end
+                            end
+
+                            for _, obj in pairs(tycoon:GetDescendants()) do
+                                if obj.Name == "Trash" then
+                                    local model = (obj.Parent.Name == "Trash") and obj.Parent.Parent or obj.Parent
+                                    local args = {{
+                                        Tycoon = tycoon,
+                                        Name = "CollectDishes",
+                                        FurnitureModel = model
+                                    }}
+                                    ReplicatedStorage.Events.Restaurant.TaskCompleted:FireServer(unpack(args))
+                                end
+                            end
+
+                            for _, obj in pairs(tycoon:WaitForChild("ClientCustomers", 9e9):GetChildren()) do
+                                if obj:IsA("Folder") then
+                                    for _, obj2 in pairs(obj:GetChildren()) do
+                                        local args = {
+                                            {
+                                                GroupId = obj.Name,
+                                                Tycoon = tycoon,
+                                                Name = "TakeOrder",
+                                                CustomerId = obj2.Name
+                                            }
+                                        }
+                                        ReplicatedStorage:WaitForChild("Events"):WaitForChild("Restaurant"):WaitForChild("TaskCompleted"):FireServer(unpack(args))
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            task.wait()
+        end
+    end
+end
+
+function lowFPS()
+    while config.limitFPS do
+        setfpscap(5)
+        task.wait(5)
+    end
+end
