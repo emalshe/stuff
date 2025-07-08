@@ -1000,47 +1000,8 @@ SaveManager:BuildConfigSection(Tabs.Settings)
 
 --Functions
 
-local function getBuffer(Ids)
-    local validIds = {}
-    for i, v in pairs(Ids) do
-        if typeof(v) == "number" then
-            table.insert(validIds, v)
-        end
-    end
-
-    local bufferSize = #validIds * 4 + 2
-    local Buffer1 = buffer.create(bufferSize)
-
-    local depth = 0
-    for _, v in pairs(validIds) do
-        if depth + 4 > bufferSize then
-            --error("depth exceeded")
-        end
-        buffer.writeu32(Buffer1, depth, v)
-        depth = depth + 4
-    end
-
-    local Buffer2 = buffer.create(depth)
-    buffer.copy(Buffer2, 0, Buffer1, 0, depth)
-
-    return Buffer2
-end
-
-local function hitBuffer(EntityId)
-    local byteStr = string.char(
-        15,
-        1,
-        0,
-        EntityId % 256,
-        math.floor(EntityId / 256) % 256,
-        math.floor(EntityId / 65536) % 256,
-        0
-    )
-    return buffer.fromstring(byteStr)
-end
-
-function HitTarget(Id)
-	BufferRemote:FireServer(hitBuffer(Id))
+function HitTarget(Ids)
+	Packets.SwingTool.send(Ids)
 end
 
 local function getClosest(objects, range)
@@ -1094,9 +1055,7 @@ function hitResources()
             end
         end
         if #entityIds > 0 then
-            for _,v in pairs(entityIds) do
-                HitTarget(v)
-            end
+            HitTarget(entityIds)
             ToolModule.SwingTool()
         end
         entityIds = {}
@@ -1123,9 +1082,7 @@ function hitCritters()
             end
         end
         if #entityIds > 0 then
-            for _,v in pairs(entityIds) do
-                HitTarget(v)
-            end
+            HitTarget(entityIds)
             ToolModule.SwingTool()
         end
         entityIds = {}
@@ -1164,9 +1121,7 @@ function hitMounds()
             end
         end
         if #entityIds > 0 then
-            for _,v in pairs(entityIds) do
-                HitTarget(v)
-            end
+            HitTarget(entityIds)
             ToolModule.SwingTool()
         end
         entityIds = {}
@@ -1193,9 +1148,7 @@ function hitTotems()
             end
         end
         if #entityIds > 0 then
-            for _,v in pairs(entityIds) do
-                HitTarget(v)
-            end
+            HitTarget(entityIds)
             ToolModule.SwingTool()
         end
         entityIds = {}
@@ -1222,9 +1175,7 @@ function hitHumCritter()
             end
         end
         if #entityIds > 0 then
-            for _,v in pairs(entityIds) do
-                HitTarget(v)
-            end
+            HitTarget(entityIds)
             ToolModule.SwingTool()
         end
         entityIds = {}
@@ -1251,9 +1202,7 @@ function hitStructures()
             end
         end
         if #entityIds > 0 then
-            for _,v in pairs(entityIds) do
-                HitTarget(v)
-            end
+            HitTarget(entityIds)
             ToolModule.SwingTool()
         end
         entityIds = {}
@@ -1293,7 +1242,7 @@ local function getClosestTarget()
     end
 end
 
-local speed = 22
+local speed = 18
 
 function farmSunTreeXP()
     local activeTweens = {}
@@ -1337,9 +1286,7 @@ function farmSunTreeXP()
                             local entityId = v:GetAttribute("EntityID")
                             if entityId then
                                 table.insert(entityIds, entityId)
-                                for _,v in pairs(entityIds) do
-                                    HitTarget(v)
-                                end
+                                HitTarget(entityIds)
                                 ToolModule.SwingTool()
                             end
                         end
@@ -1355,9 +1302,7 @@ function farmSunTreeXP()
                         local entityId = v:GetAttribute("EntityID")
                         if entityId then
                             table.insert(shellyEntityIds, entityId)
-                            for _,v in pairs(shellyEntityIds) do
-                                HitTarget(v)
-                            end
+                            HitTarget(shellyEntityIds)
                             ToolModule.SwingTool()
                         end
                     end
@@ -1578,7 +1523,7 @@ function goldFarm()
             if iceTarget then
                 local iceId = iceTarget:GetAttribute("EntityID")
                 if iceId then
-                    HitTarget(iceId)
+                    HitTarget({iceId})
                     ToolModule.SwingTool()
                 end
                 
@@ -1604,7 +1549,7 @@ function goldFarm()
             elseif goldTarget then
                 local goldId = goldTarget:GetAttribute("EntityID")
                 if goldId then
-                    HitTarget(goldId)
+                    HitTarget({goldId})
                     ToolModule.SwingTool()
                 end
 
@@ -1953,10 +1898,7 @@ function farmCrystals()
 
             if target then
                 table.insert(eIds, target:GetAttribute("EntityID"))
-                for _,v in pairs(eIds) do
-                    HitTarget(v)
-                    ToolModule.SwingTool()
-                end
+                HitTarget(eIds)
                 ToolModule.SwingTool()
                 eIds = {}
 
@@ -2096,7 +2038,7 @@ function HitPlayer()
         local target = getClosestPlayer()
         if target and target:FindFirstChildOfClass("Humanoid").Health > 0 then
             local EId = target:GetAttribute("EntityID")
-            HitTarget(EId)
+            HitTarget({EId})
             ToolModule.SwingTool()
         else
             target = nil
