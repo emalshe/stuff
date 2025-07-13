@@ -6526,12 +6526,27 @@ function Luna:CreateWindow(WindowSettings)
 				objects = {}
 			}
 
+			local saveOrder = {"Input", "Slider", "Dropdown", "Toggle", "Colorpicker"}
+			local classBuckets = {}
+
 			for flag, option in next, Luna.Options do
 				if not ClassParser[option.Class] then continue end
 				if option.IgnoreConfig then continue end
 
-				table.insert(data.objects, ClassParser[option.Class].Save(flag, option))
-			end	
+				classBuckets[option.Class] = classBuckets[option.Class] or {}
+				table.insert(classBuckets[option.Class], {flag = flag, option = option})
+			end
+
+			for _, className in ipairs(saveOrder) do
+				local entries = classBuckets[className]
+				if entries then
+					for _, entry in ipairs(entries) do
+						local flag = entry.flag
+						local option = entry.option
+						table.insert(data.objects, ClassParser[className].Save(flag, option))
+					end
+				end
+			end
 
 			local success, encoded = pcall(HttpService.JSONEncode, HttpService, data)
 			if not success then
