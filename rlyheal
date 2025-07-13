@@ -6608,6 +6608,8 @@ function Luna:CreateWindow(WindowSettings)
 			end 
 		end
 
+		Luna:LoadAutoloadConfig()
+
 		function Luna:RefreshConfigList()
 			if isStudio then return "Config system unavailable." end
 
@@ -7000,5 +7002,5 @@ end
     t1:CreateDropdown({Callback = function(t) print(unpack(t)) end})
     t1:CreateDropdown({Description = "Special Type - Player", Callback = "", SpecialType = "Player"})
 end]]--
-Luna:LoadAutoloadConfig()
+
 return Luna
