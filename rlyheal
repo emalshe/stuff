@@ -6608,8 +6608,6 @@ function Luna:CreateWindow(WindowSettings)
 			end 
 		end
 
-		Luna:LoadAutoloadConfig()
-
 		function Luna:RefreshConfigList()
 			if isStudio then return "Config system unavailable." end
 
