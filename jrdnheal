@@ -1,9 +1,13 @@
 if not game:IsLoaded() then game.Loaded:Wait() end 
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+repeat task.wait() until ReplicatedStorage:FindFirstChild("Systems")
+repeat task.wait() until ReplicatedStorage:FindFirstChild("Systems"):FindFirstChild("Combat")
+
 local plrs = game:GetService("Players")
 local lp = plrs.LocalPlayer
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local CombatModule = require(ReplicatedStorage:WaitForChild("Systems", 9e9):FindFirstChild("Combat"))
+local CombatModule = require(ReplicatedStorage.Systems.Combat)
 local TS = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
