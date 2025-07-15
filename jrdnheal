@@ -1,3 +1,5 @@
+if not game:IsLoaded() then game.Loaded:Wait() end 
+
 local plrs = game:GetService("Players")
 local lp = plrs.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -23,8 +25,29 @@ end
 
 getgenv().Autofarm = true
 
+local clickedAgain = false
+
 task.spawn(function()
     while getgenv().Autofarm do
+        local chestGui = lp.PlayerGui.ChestOpen
+        local claim = chestGui.Overlay.Button
+        local dungeonGui = lp.PlayerGui.DungeonCleared
+        local again = dungeonGui.Frame.Buttons.RunAgain
+        local startDungeon = lp.PlayerGui.DungeonHUD.StartDungeon
+
+        if startDungeon.Visible then
+            firesignal(startDungeon["MouseButton1Click"])
+        end
+
+        if chestGui.Enabled then
+            firesignal(claim["MouseButton1Click"])
+        end
+
+        if dungeonGui.Enabled and not clickedAgain then
+            firesignal(again["MouseButton1Click"])
+            clickedAgain = true
+        end
+
         if workspace:FindFirstChild("Mobs") and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and lp.Character:GetAttribute("HP") > 0 then
             CombatModule:PlayerAttack(lp, workspace.Mobs:GetChildren())
         end
