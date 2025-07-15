@@ -1,87 +1,75 @@
-local autoToggles = {"Delete Enemies", "Delete Debris", "Disable Animations"}
+local plrs = game:GetService("Players")
+local lp = plrs.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CombatModule = require(ReplicatedStorage.Systems.Combat)
+local TS = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 
-if not game:IsLoaded() then game.Loaded:Wait() end
+local function getClosestMob()
+    local mob = nil
+    local closest = 1/0
 
-if game.PlaceId ~= 12886143095 and game.PlaceId ~= 18583778121 then
-    local library = loadstring(game:HttpGet("https://pastebin.com/raw/PfpbFHcM"))();
-
-    local Window1 = library:CreateWindow("ALS Anti-Crash");
-
-    Window1:Toggle("Delete Enemies", function(E)
-        DE = E;
-        spawn(AntiCrash)
-    end)
-
-    Window1:Toggle("Delete Debris", function(F)
-        DD = F;
-        spawn(AntiCrash)
-    end)
-
-    Window1:Toggle("Disable Animations", function(G)
-        DTA = G;
-        spawn(AntiCrash)
-    end)
-
-    function AntiCrash()
-        while task.wait() do
-            if DE then
-                pcall(function()
-                    for _, v in pairs(workspace.Enemies:GetChildren()) do
-                        v:Destroy()
-                    end
-                end)
-            end
-            if DD then
-                pcall(function()
-                    for _, v in pairs(workspace.Debris:GetChildren()) do
-                        v:Destroy()
-                    end
-                end)
-            end
-            if DTA then
-                pcall(function()
-                    for _, v in pairs(workspace.Towers:GetDescendants()) do
-                        if v.Name == "Animations" and v:IsA("Folder") then
-                            v:Destroy()
-                        end
-                    end
-                end)
+    for i,v in pairs(workspace.Mobs:GetChildren()) do
+        if v:IsA("Model") and not v:GetAttribute("Owner") and v:GetAttribute("HP") > 0 and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+            local dist = (lp.Character.HumanoidRootPart.Position - v:GetPivot().Position).Magnitude
+            if dist < closest then
+                closest = dist
+                mob = v
             end
         end
     end
+    return mob
+end
 
-    repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("UnitVFX") and game:GetService("ReplicatedStorage"):FindFirstChild("EnemyAbilityVFX")
+getgenv().Autofarm = true
 
-    for _, v1 in pairs(game:GetService("ReplicatedStorage").UnitVFX:GetDescendants()) do
-        if v1:IsA("ModuleScript") then
-            local mScript = require(v1)
-            if typeof(mScript) == "table" then
-                for key, value in pairs(mScript) do
-                    if typeof(value) == "function" then
-                        mScript[key] = function() return end
+task.spawn(function()
+    while getgenv().Autofarm do
+        if workspace:FindFirstChild("Mobs") and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and lp.Character:GetAttribute("HP") > 0 then
+            CombatModule:PlayerAttack(lp, workspace.Mobs:GetChildren())
+        end
+        task.wait(0.2)
+    end
+end)
+
+task.spawn(function()
+    while getgenv().Autofarm do
+        pcall(function()
+            local mob = getClosestMob()
+
+            if mob and lp.Character and lp.Character.PrimaryPart then
+                for _, part in ipairs(lp.Character:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                        part.CanTouch = false
                     end
                 end
-            end
-        end
-    end
 
-    for _, v in pairs(game:GetService("ReplicatedStorage").EnemyAbilityVFX:GetDescendants()) do
-        if v:IsA("ModuleScript") then
-            local mScript = require(v)
-            if typeof(mScript) == "function" then
-                mScript = function() return end
-            end
-        end
-    end
+                local mobCFrame = mob:GetPivot()
+                local targetCFrame = mobCFrame * CFrame.new(50, 0, 0)
 
-    repeat task.wait() until game:GetService("CoreGui"):FindFirstChild("UI Library")
-    
-    for _, v in pairs(game:GetService("CoreGui")["UI Library"]:GetDescendants()) do
-        if v.Name == "ToggleText" and v:IsA("TextLabel") and table.find(autoToggles, v.Text) then
-            local toggleButton = v.Parent:FindFirstChild("MainToggle")
-            if toggleButton then
-                firesignal(toggleButton["MouseButton1Click"])
+                local duration = 10
+                local elapsed = 0
+                local step = 0.016
+
+                while elapsed < duration and getgenv().Autofarm do
+                    if not (lp.Character and lp.Character.PrimaryPart and mob and mob.Parent) then
+                        break
+                    end
+
+                    local startCFrame = lp.Character.PrimaryPart.CFrame
+                    targetCFrame = mob:GetPivot() * CFrame.new(50, 0, 0)
+
+                    task.wait(step)
+                    elapsed += step
+
+                    local alpha = math.clamp(elapsed / duration, 0, 1)
+                    local lerpedCFrame = startCFrame:Lerp(targetCFrame, alpha)
+
+                    lp.Character:SetPrimaryPartCFrame(lerpedCFrame)
+                end
             end
-        end
+        end)
+        task.wait(0.05)
     end
-end
+end)
