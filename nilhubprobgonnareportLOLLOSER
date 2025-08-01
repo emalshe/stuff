@@ -34,7 +34,7 @@ local Lighting = cloneref(game:GetService("Lighting"))
 local UserInputService = cloneref(game:GetService("UserInputService"))
 local Packets = require(ReplicatedStorage.Modules.Packets)
 local BufferRemote = ReplicatedStorage:WaitForChild("ByteNetReliable", math.huge)
-local ToolModule = require(lp.PlayerScripts.src.Game.Tool)
+local ToolModule = require(lp.PlayerScripts.src.Game.tool)
 local ItemsModule = require(ReplicatedStorage.Modules.ItemData)
 local ItemIDS = require(ReplicatedStorage.Modules.ItemIDS)
 local TeleportService = cloneref(game:GetService("TeleportService"))
@@ -1056,7 +1056,7 @@ function hitResources()
         end
         if #entityIds > 0 then
             HitTarget(entityIds)
-            ToolModule.SwingTool()
+            ToolModule.swingTool()
         end
         entityIds = {}
         task.wait(0.1)
@@ -1083,7 +1083,7 @@ function hitCritters()
         end
         if #entityIds > 0 then
             HitTarget(entityIds)
-            ToolModule.SwingTool()
+            ToolModule.swingTool()
         end
         entityIds = {}
         task.wait(0.1)
@@ -1122,7 +1122,7 @@ function hitMounds()
         end
         if #entityIds > 0 then
             HitTarget(entityIds)
-            ToolModule.SwingTool()
+            ToolModule.swingTool()
         end
         entityIds = {}
         task.wait(0.1)
@@ -1149,7 +1149,7 @@ function hitTotems()
         end
         if #entityIds > 0 then
             HitTarget(entityIds)
-            ToolModule.SwingTool()
+            ToolModule.swingTool()
         end
         entityIds = {}
         task.wait(0.1)
@@ -1176,7 +1176,7 @@ function hitHumCritter()
         end
         if #entityIds > 0 then
             HitTarget(entityIds)
-            ToolModule.SwingTool()
+            ToolModule.swingTool()
         end
         entityIds = {}
         task.wait(0.1)
@@ -1203,7 +1203,7 @@ function hitStructures()
         end
         if #entityIds > 0 then
             HitTarget(entityIds)
-            ToolModule.SwingTool()
+            ToolModule.swingTool()
         end
         entityIds = {}
         task.wait(0.1)
@@ -1287,7 +1287,7 @@ function farmSunTreeXP()
                             if entityId then
                                 table.insert(entityIds, entityId)
                                 HitTarget(entityIds)
-                                ToolModule.SwingTool()
+                                ToolModule.swingTool()
                             end
                         end
                     end
@@ -1303,7 +1303,7 @@ function farmSunTreeXP()
                         if entityId then
                             table.insert(shellyEntityIds, entityId)
                             HitTarget(shellyEntityIds)
-                            ToolModule.SwingTool()
+                            ToolModule.swingTool()
                         end
                     end
                 end
@@ -1524,7 +1524,7 @@ function goldFarm()
                 local iceId = iceTarget:GetAttribute("EntityID")
                 if iceId then
                     HitTarget({iceId})
-                    ToolModule.SwingTool()
+                    ToolModule.swingTool()
                 end
                 
                 local groundLevel = lp.Character.PrimaryPart.Position.Y
@@ -1550,7 +1550,7 @@ function goldFarm()
                 local goldId = goldTarget:GetAttribute("EntityID")
                 if goldId then
                     HitTarget({goldId})
-                    ToolModule.SwingTool()
+                    ToolModule.swingTool()
                 end
 
                 local groundLevel = lp.Character.PrimaryPart.Position.Y
@@ -1899,7 +1899,7 @@ function farmCrystals()
             if target then
                 table.insert(eIds, target:GetAttribute("EntityID"))
                 HitTarget(eIds)
-                ToolModule.SwingTool()
+                ToolModule.swingTool()
                 eIds = {}
 
                 local groundLevel = lp.Character.PrimaryPart.Position.Y
@@ -2039,7 +2039,7 @@ function HitPlayer()
         if target and target:FindFirstChildOfClass("Humanoid").Health > 0 then
             local EId = target:GetAttribute("EntityID")
             HitTarget({EId})
-            ToolModule.SwingTool()
+            ToolModule.swingTool()
         else
             target = nil
         end
